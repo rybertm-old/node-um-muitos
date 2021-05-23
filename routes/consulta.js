@@ -21,10 +21,10 @@ router.get('/delete/(:IdProduto)', function(req, res, next) {
     dbConn.query('DELETE FROM produto WHERE IdProduto = ' + IdProduto, function(err, result) {
     if (err) {
     req.flash('error', err)
-    res.redirect('/empresa') // redirecionar para página principal
+    res.redirect('/consulta') // redirecionar para página principal
     } else {
     req.flash('success', 'consulta deletado...! ID = ' + IdProduto)
-    res.redirect('/empresa')
+    res.redirect('/consulta')
     }
     })
     })
