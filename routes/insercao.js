@@ -99,7 +99,7 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
                 })
             } else {
                 req.flash('success', 'Inserido com sucesso');
-                res.redirect('/insercao/adicionar');
+                res.redirect('/consulta');
             }
         })
     }
