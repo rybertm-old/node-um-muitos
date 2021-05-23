@@ -50,20 +50,18 @@
                 <td><%= dataProduto[i].Unidade %></td>
                 <td><%= dataProduto[i].Tipo %></td>
                 <td>
-                  <a class="btn btn-primary btn-sm edit" href="../empresa/atualizar/<%= dataProduto[i].IdProduto %>">Editar</a>  
+                  <a class="btn btn-primary btn-sm edit" href="../consulta/atualizar/<%= dataProduto[i].IdProduto %>">Editar</a>  
                 </td>  
                 <td>                       
-                  <a class="btn btn-secondary btn-sm delete" 
-                  onclick="return confirm('Tem certeza da remoção do Livro: '+'<%=dataProduto[i].Descricao%>') " 
-                  href="../empresa/delete/<%=dataProduto[i].IdProduto%>">Deletar
-                </a>                       
+                  <a class="btn btn-secondary btn-sm delete" onclick="return confirm('Tem certeza da remoção do Livro: '+'<%=dataProduto[i].Descricao%>') " 
+                  href="../consulta/delete/<%=dataProduto[i].IdProduto%>">Deletar</a>                       
                 </td>  
             </tr>  <% } %>    
         </tbody>
     </table>
     <% } %>   <!-- se resultado vazio da query data -->
     <% if(!dataProduto.length) { %>
-        <p class="text-center">Livro não encontrado!</p>
+        <p class="text-center">Produto não encontrado!</p>
     <% } %>
     </div>
 </div>
