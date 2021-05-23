@@ -24,7 +24,7 @@ app.use(session({
 
 app.use(flash());
 
-app.use('/', require('./routes/consulta.js'));
+app.use('/consulta', require('./routes/consulta.js'));
 // app.use('/consulta', require('./routes/consulta.js'));
 app.use('/insercao', require('./routes/insercao.js'));
 app.use('/addmodal', require('./routes/addmodal.js'));
