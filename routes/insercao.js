@@ -60,7 +60,7 @@ router.post('/adicionar', function (req, res, _) {    //'/adicionar' é o caminh
         } else {
             console.log(result.insertId);
             req.flash('success', 'Inserido com sucesso');
-            res.redirect('/consultar');
+            res.redirect('/consulta');
         }
     });
 });
@@ -99,7 +99,7 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
                 })
             } else {
                 req.flash('success', 'Inserido com sucesso');
-                res.redirect('/insercao/adicionar');
+                res.redirect('/consulta');
             }
         })
     }
