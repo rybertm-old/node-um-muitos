@@ -60,7 +60,7 @@ router.post('/adicionar', function (req, res, _) {    //'/adicionar' é o caminh
         } else {
             console.log(result.insertId);
             req.flash('success', 'Inserido com sucesso');
-            res.redirect('/consultar');
+            res.redirect('/consulta');
         }
     });
 });
@@ -104,5 +104,86 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
         })
     }
 });
+
+// ROTA PARA EDITAR REGISTRO
+router.get('/atualizar/(:id)', function (req, res, next) {
+    let id = req.params.id; //recebe id da página editar.ejs
+
+    // let Nome = req.body.Nome;
+    // let Endereco = req.body.Endereco;
+    // let Cidade = req.body.Cidade;
+    // let Cep = req.body.Cep;
+    // let Pais = req.body.Pais;
+    // let CodProd = req.body.CodProd;
+    // let errors = false;
+
+
+    dbConn.query('SELECT * FROM fornecedor WHERE IdFornec = ' + id,
+        function (err, queryEditar, fields) {
+            if (queryEditar.length <= 0) { //se query retornou vazia
+                req.flash('error', 'Não encontrado fornecedor com id = ' + id)
+                res.redirect('/consulta');
+            } else {
+                // render para editar.ejs com dados do departamento da query rows
+                res.render('empresa/editar_fornecedor.ejs', {
+                    title: 'Edita Departamento',
+                    id: id,
+                    Nome: queryEditar[0].Nome,
+                    Endereco: queryEditar[0].Endereco,
+                    Cidade: queryEditar[0].Cidade,
+                    Cep: queryEditar[0].Cep,
+                    Pais: queryEditar[0].Pais,
+                    CodProd: queryEditar[0].CodProd,
+                });
+                res.render('/consulta')
+            }
+        });
+});
+
+// rota (post) para atualizar departamentos
+router.post('/atualizar/:id', function (req, res, next) {
+    let id = req.params.id;
+    let Nome = req.body.Nome;
+    let Endereco = req.body.Endereco;
+    let Cidade = req.body.Cidade;
+    let Cep = req.body.Cep;
+    let Pais = req.body.Pais;
+    let CodProd = req.body.CodProd;
+    let errors = false;
+
+    if (!errors) {
+        var editaDados = {
+            Nome: Nome,
+            Endereco: Endereco,
+            Cidade: Cidade,
+            Cep: Cep,
+            Pais: Pais,
+            CodProd: CodProd
+        }
+        // update query
+        dbConn.query('UPDATE fornecedor SET ? WHERE IdFornec = ' + id,
+            editaDados, function (err, result) {
+                if (err) {
+                    req.flash('error', err)
+                    // render para editar.ejs com os mesmos dados
+                    // res.render('pesquisa/editar.ejs', {
+                    //     Nome: insereDadosF.Nome,
+                    //     Endereco: insereDadosF.Endereco,
+                    //     Cidade: insereDadosF.Cidade,
+                    //     Cep: insereDadosF.Cep,
+                    //     Pais: insereDadosF.Pais,
+                    //     CodProd: insereDadosF.CodProd
+                    // })
+
+                    res.redirect('../../consulta')
+                } else {
+                    req.flash('success', 'Fornecedor atualizado com sucesso');
+                    res.redirect('../../consulta');
+                }
+            });
+    }
+});
+
+
 
 module.exports = router;

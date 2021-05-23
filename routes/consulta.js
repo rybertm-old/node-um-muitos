@@ -16,16 +16,16 @@ router.get('/', function (req, res, next) {
     });
 });
 // DELETAR PRODUTO
-router.get('/delete/(:IdProduto)', function(req, res, next) {
+router.get('/delete/(:IdProduto)', function (req, res, next) {
     let IdProduto = parseInt(req.params.IdProduto);
-    dbConn.query('DELETE FROM produto WHERE IdProduto = ' + IdProduto, function(err, result) {
-    if (err) {
-    req.flash('error', err)
-    res.redirect('/consulta') // redirecionar para página principal
-    } else {
-    req.flash('success', 'consulta deletado...! ID = ' + IdProduto)
-    res.redirect('/consulta')
-    }
+    dbConn.query('DELETE FROM produto WHERE IdProduto = ' + IdProduto, function (err, result) {
+        if (err) {
+            req.flash('error', err)
+            res.redirect('/consulta') // redirecionar para página principal
+        } else {
+            req.flash('success', 'consulta deletado...! ID = ' + IdProduto)
+            res.redirect('/consulta')
+        }
     })
-    })
+})
 module.exports = router;
