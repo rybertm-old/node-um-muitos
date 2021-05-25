@@ -105,18 +105,9 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
     }
 });
 
-// ROTA PARA EDITAR REGISTRO
+// ROTA PARA EDITAR FORNECEDORES
 router.get('/atualizar/(:id)', function (req, res, next) {
-    let id = req.params.id; //recebe id da página editar.ejs
-
-    // let Nome = req.body.Nome;
-    // let Endereco = req.body.Endereco;
-    // let Cidade = req.body.Cidade;
-    // let Cep = req.body.Cep;
-    // let Pais = req.body.Pais;
-    // let CodProd = req.body.CodProd;
-    // let errors = false;
-
+    let id = req.params.id;
 
     dbConn.query('SELECT * FROM fornecedor WHERE IdFornec = ' + id,
         function (err, queryEditar, fields) {
@@ -140,7 +131,7 @@ router.get('/atualizar/(:id)', function (req, res, next) {
         });
 });
 
-// rota (post) para atualizar departamentos
+// rota (post) para atualizar fornecedores
 router.post('/atualizar/:id', function (req, res, next) {
     let id = req.params.id;
     let Nome = req.body.Nome;
@@ -165,16 +156,6 @@ router.post('/atualizar/:id', function (req, res, next) {
             editaDados, function (err, result) {
                 if (err) {
                     req.flash('error', err)
-                    // render para editar.ejs com os mesmos dados
-                    // res.render('pesquisa/editar.ejs', {
-                    //     Nome: insereDadosF.Nome,
-                    //     Endereco: insereDadosF.Endereco,
-                    //     Cidade: insereDadosF.Cidade,
-                    //     Cep: insereDadosF.Cep,
-                    //     Pais: insereDadosF.Pais,
-                    //     CodProd: insereDadosF.CodProd
-                    // })
-
                     res.redirect('../../consulta')
                 } else {
                     req.flash('success', 'Fornecedor atualizado com sucesso');
