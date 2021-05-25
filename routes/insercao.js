@@ -3,12 +3,12 @@ var router = express.Router();
 var dbConn = require('../db/db.js');
 
 //----ROTA PARA DEFINIÇÃO DE PRODUTOS e FORNECEDORES
-router.get('/adicionar', function (req, res, next) {
+router.get('/', function (req, res, next) {
     //let idProduto = req.params.IdProduto; //recebe parâmetro id da pagina inserir.ejs
     var sql1 = 'SELECT IdCategoria, Tipo FROM categoria';
     var sql2 = 'SELECT * FROM fornecedor, produto WHERE CodProd=IdProduto'; // and IdProduto=' +id;
-    dbConn.query(sql1, function (err, queryCategoria) { //executa sql1 para CATEGORIA
-        if (err) throw err;
+    dbConn.query(sql1, function (er, queryCategoria) { //executa sql1 para CATEGORIA
+        if (er) throw er;
         dbConn.query(sql2, function (err, queryFornecedor) { //executa sql1 para CATEGORIA
             if (err) throw err;
             res.render('empresa/inserir.ejs', {
@@ -49,7 +49,7 @@ router.post('/adicionar', function (req, res, _) {    //'/adicionar' é o caminh
     // ROTA PARA INSERIR REGISTRO
     dbConn.query('INSERT INTO produto SET ?', insereDados, function (err, result) {
         if (err) { //if(err) throw err
-            req.flash('error', err)
+            req.flash('error', err.message)
             // renderizar página inserir.ejs
             res.render('empresa/inserir.ejs', {
                 Descricao: insereDados.Descricao,
@@ -60,7 +60,7 @@ router.post('/adicionar', function (req, res, _) {    //'/adicionar' é o caminh
         } else {
             console.log(result.insertId);
             req.flash('success', 'Inserido com sucesso');
-            res.redirect('/consulta');
+            res.redirect('/insercao');
         }
     });
 });
@@ -88,7 +88,7 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
         // ROTA PARA INSERIR REGISTRO
         dbConn.query('INSERT INTO fornecedor SET ?', insereDadosF, function (err, result) {
             if (err) { //if(err) throw err
-                req.flash('error', err)
+                req.flash('error', err.sqlMessage)
                 res.render('empresa/inserir.ejs', {
                     Nome: insereDadosF.Nome,
                     Endereco: insereDadosF.Endereco,
@@ -99,15 +99,24 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
                 })
             } else {
                 req.flash('success', 'Inserido com sucesso');
-                res.redirect('/consulta');
+                res.redirect('/insercao');
             }
         })
     }
 });
 
-// ROTA PARA EDITAR FORNECEDORES
+// ROTA PARA EDITAR REGISTRO
 router.get('/atualizar/(:id)', function (req, res, next) {
-    let id = req.params.id;
+    let id = req.params.id; //recebe id da página editar.ejs
+
+    // let Nome = req.body.Nome;
+    // let Endereco = req.body.Endereco;
+    // let Cidade = req.body.Cidade;
+    // let Cep = req.body.Cep;
+    // let Pais = req.body.Pais;
+    // let CodProd = req.body.CodProd;
+    // let errors = false;
+
 
     dbConn.query('SELECT * FROM fornecedor WHERE IdFornec = ' + id,
         function (err, queryEditar, fields) {
@@ -126,12 +135,11 @@ router.get('/atualizar/(:id)', function (req, res, next) {
                     Pais: queryEditar[0].Pais,
                     CodProd: queryEditar[0].CodProd,
                 });
-                res.render('/consulta')
             }
         });
 });
 
-// rota (post) para atualizar fornecedores
+// rota (post) para atualizar departamentos
 router.post('/atualizar/:id', function (req, res, next) {
     let id = req.params.id;
     let Nome = req.body.Nome;
@@ -155,16 +163,38 @@ router.post('/atualizar/:id', function (req, res, next) {
         dbConn.query('UPDATE fornecedor SET ? WHERE IdFornec = ' + id,
             editaDados, function (err, result) {
                 if (err) {
-                    req.flash('error', err)
-                    res.redirect('../../consulta')
+                    req.flash('error', err.sqlMessage)
+                    // render para editar.ejs com os mesmos dados
+                    // res.render('pesquisa/editar.ejs', {
+                    //     Nome: insereDadosF.Nome,
+                    //     Endereco: insereDadosF.Endereco,
+                    //     Cidade: insereDadosF.Cidade,
+                    //     Cep: insereDadosF.Cep,
+                    //     Pais: insereDadosF.Pais,
+                    //     CodProd: insereDadosF.CodProd
+                    // })
+
+                    res.redirect('/insercao')
                 } else {
                     req.flash('success', 'Fornecedor atualizado com sucesso');
-                    res.redirect('../../consulta');
+                    res.redirect('/insercao');
                 }
             });
     }
 });
 
-
+// DELETAR FORNECEDOR
+router.get('/delete/(:IdFornec)', function (req, res, next) {
+    let IdFornec = parseInt(req.params.IdFornec);
+    dbConn.query('DELETE FROM fornecedor WHERE IdFornec = ' + IdFornec, function (err, result) {
+        if (err) {
+            req.flash('error', err.sqlMessage)
+            res.redirect('/insercao') // redirecionar para página principal
+        } else {
+            req.flash('success', 'fornecedor deletado...! ID = ' + IdFornec)
+            res.redirect('/insercao')
+        }
+    })
+});
 
 module.exports = router;
