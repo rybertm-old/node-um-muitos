@@ -24,8 +24,7 @@ app.use(session({
 
 app.use(flash());
 
-app.use('/consulta', require('./routes/consulta.js'));
-// app.use('/consulta', require('./routes/consulta.js'));
+app.use('/', require('./routes/consulta.js'));
 app.use('/insercao', require('./routes/insercao.js'));
 app.use('/addmodal', require('./routes/addmodal.js'));
 
@@ -44,5 +43,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+console.log("Aplicação Rodando, acesse http://localhost:3000/ para utilizá-la");
 
 module.exports = app;
