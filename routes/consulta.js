@@ -54,7 +54,7 @@ router.get('/consulta/atualizar/(:IdProduto)', function (req, res, next) {
         })
 })
 
-// rota (post) para atualizar livros
+// ATUALIZAR PRODUTO
 router.post('/consulta/atualizar/:IdProduto', function (req, res, next) {
     let IdProduto = req.params.IdProduto;
     let Descricao = req.body.Descricao;

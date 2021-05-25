@@ -105,7 +105,7 @@ router.post('/add', function (req, res, next) {    //'/adicionar' é o caminho i
     }
 });
 
-// ROTA PARA EDITAR REGISTRO
+// ROTA PARA EDITAR FORNECEDOR
 router.get('/atualizar/(:id)', function (req, res, next) {
     let id = req.params.id; //recebe id da página editar.ejs
 
@@ -139,7 +139,7 @@ router.get('/atualizar/(:id)', function (req, res, next) {
         });
 });
 
-// rota (post) para atualizar departamentos
+// rota (post) para atualizar fornecedor
 router.post('/atualizar/:id', function (req, res, next) {
     let id = req.params.id;
     let Nome = req.body.Nome;
