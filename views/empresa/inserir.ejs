@@ -18,6 +18,11 @@
       document.getElementById("Categ").value = select_c;
     }
 
+    function carregaProduto() {
+      var select_p = document.getElementById("Lista_p").value;
+      document.getElementById("Prod").value = select_p;
+    }
+
   </script>
 </head>
 
@@ -149,8 +154,19 @@
                       <label>Pais:</label>
                       <input type="text" class="form-control form-control-sm" name="Pais" value="<%= Pais %>"
                         autocomplete="off" required>
+                      <label>Selecione o produto a ser associado:</label>
+                      <!-- Select com dados do bd tabela CATEGORIA - UM-PARA-MUITOS -->
+                      <select class="form-control form-control-sm" id="Lista_p" name="select"
+                        onchange="carregaProduto()">
+                        <% for (var i=0; i < dataProduto.length; i++) { %>
+                          <option value="<%= dataProduto[i].IdProduto %>">
+                            <%= dataProduto[i].Descricao %>
+                          </option>
+                          <% } %>
+                      </select>
                       <label>CodProd:</label>
-                      <input type="text" class="form-control form-control-sm" name="CodProd" value="<%= CodProd %>">
+                      <input type="text" class="form-control form-control-sm" id="Prod" name="CodProd"
+                        value="<%= CodProd %>">
                     </div>
                     <div class="modal-footer">
                       <input type="submit" class="btn btn-info" value="Inserir Fornecedor" />

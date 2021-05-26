@@ -7,24 +7,30 @@ router.get('/', function (req, res, next) {
     //let idProduto = req.params.IdProduto; //recebe parâmetro id da pagina inserir.ejs
     var sql1 = 'SELECT IdCategoria, Tipo FROM categoria';
     var sql2 = 'SELECT * FROM fornecedor, produto WHERE CodProd=IdProduto'; // and IdProduto=' +id;
+    var sql3 = 'SELECT IdProduto, Descricao FROM produto';
     dbConn.query(sql1, function (er, queryCategoria) { //executa sql1 para CATEGORIA
         if (er) throw er;
         dbConn.query(sql2, function (err, queryFornecedor) { //executa sql1 para CATEGORIA
             if (err) throw err;
-            res.render('empresa/inserir.ejs', {
-                dataCategoria: queryCategoria, // definicao atributos query (sql2) CATEGORIA
-                Descricao: '',
-                Preco: '',
-                Unidade: '',
-                CodCateg: '',
-                dataFornecedor: queryFornecedor, // definicao atributos query (sql2) FORNECEDOR
-                Nome: '',
-                Endereco: '',
-                Cidade: '',
-                Cep: '',
-                Pais: '',
-                CodProd: '',
+            dbConn.query(sql3, function (errr, queryProduto) {
+                if (errr) throw err;
 
+                res.render('empresa/inserir.ejs', {
+                    dataCategoria: queryCategoria, // definicao atributos query (sql2) CATEGORIA
+                    dataProduto: queryProduto,
+                    Descricao: '',
+                    Preco: '',
+                    Unidade: '',
+                    CodCateg: '',
+                    dataFornecedor: queryFornecedor, // definicao atributos query (sql2) FORNECEDOR
+                    Nome: '',
+                    Endereco: '',
+                    Cidade: '',
+                    Cep: '',
+                    Pais: '',
+                    CodProd: '',
+
+                });
             });
 
         });
@@ -117,9 +123,12 @@ router.get('/atualizar/(:id)', function (req, res, next) {
     // let CodProd = req.body.CodProd;
     // let errors = false;
 
-
-    dbConn.query('SELECT * FROM fornecedor WHERE IdFornec = ' + id,
-        function (err, queryEditar, fields) {
+    var sql1 = 'SELECT IdProduto, Descricao FROM produto';
+    var sql2 = 'SELECT * FROM fornecedor, produto WHERE CodProd=IdProduto'; // and IdProduto=' +id;
+    dbConn.query(sql1, function (er, queryProduto) {
+        if (er) throw er;
+        dbConn.query(sql2, function (err, queryEditar, fields) {
+            if (err) throw err;
             if (queryEditar.length <= 0) { //se query retornou vazia
                 req.flash('error', 'Não encontrado fornecedor com id = ' + id)
                 res.redirect('/consulta');
@@ -128,6 +137,7 @@ router.get('/atualizar/(:id)', function (req, res, next) {
                 res.render('empresa/editar_fornecedor.ejs', {
                     title: 'Edita Departamento',
                     id: id,
+                    dataProduto: queryProduto,
                     Nome: queryEditar[0].Nome,
                     Endereco: queryEditar[0].Endereco,
                     Cidade: queryEditar[0].Cidade,
@@ -137,6 +147,9 @@ router.get('/atualizar/(:id)', function (req, res, next) {
                 });
             }
         });
+    });
+
+
 });
 
 // rota (post) para atualizar fornecedor
