@@ -35,7 +35,7 @@ router.get('/consulta/delete/(:IdProduto)', function (req, res, next) {
 // EDITAR PRODUTO
 router.get('/consulta/atualizar/(:IdProduto)', function (req, res, next) {
     let IdProduto = req.params.IdProduto;
-    dbConn.query('SELECT * FROM produto WHERE IdProduto = ' + IdProduto,
+    dbConn.query('SELECT * FROM produto inner join categoria WHERE IdProduto = ' + IdProduto,
         function (err, queryEditar, fields) {
             if (queryEditar.length <= 0) { //se query retornou vazia
                 req.flash('error', 'Não encontrado produto com IdProduto = ' + IdProduto)
@@ -44,11 +44,12 @@ router.get('/consulta/atualizar/(:IdProduto)', function (req, res, next) {
                 // render para editar.ejs com dados do livro da query rows
                 res.render('empresa/editar.ejs', {
                     title: 'Edita produto',
+                    dataProduto: queryEditar,
                     IdProduto: queryEditar[0].IdProduto,
                     Descricao: queryEditar[0].Descricao,
                     Unidade: queryEditar[0].Unidade,
                     Preco: queryEditar[0].Preco,
-                    CodCateg: queryEditar[0].CodCateg
+                    CodCateg: queryEditar[0].CodCateg,
                 })
             }
         })
